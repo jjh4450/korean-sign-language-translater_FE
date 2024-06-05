@@ -1,16 +1,17 @@
 import { Link } from 'react-router-dom';
-import DynamicLottie from '../componets/DynamicLottie';
-import animationData from '../assets/notfound404.json';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import notfound404 from '../assets/notfound404.lottie';
 
 function NotFound() {
-
     return (
-        <section className="text-gray-600 body-font">
-            <DynamicLottie 
-                animationData={animationData}
-                widthRatio={0.3}
-                heightRatio={0.4}
-            />
+        <section className="text-gray-600 body-font flex flex-col justify-center ">
+            <div className='lg:w-2/5 md:w-1/2 mx-auto'>
+                <DotLottieReact
+                    src={notfound404}
+                    loop
+                    autoplay
+                />
+            </div>
             <div className="container px-5 py-24 mx-auto">
                 <div className="lg:w-2/3 flex flex-col sm:flex-row sm:items-center items-center mx-auto">
                     <h1 className="flex-grow sm:pr-16 text-2xl font-medium title-font text-gray-900 text-center sm:text-left">존재하지 않는 페이지 입니다! (404)</h1>
