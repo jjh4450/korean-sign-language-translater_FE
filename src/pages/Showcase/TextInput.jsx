@@ -43,8 +43,9 @@ const TextInput = () => {
     <div className="text-center lg:w-2/5 md:w-1/2 w-full">
       <p
         className="mt-8 bg-gray-100 p-4 rounded-t-lg shadow-inner text-xl font-medium text-gray-800 cursor-pointer"
-        onClick={handleExpand}
-        onTouchStart={handleExpand}
+        onMouseDown={() => setButtonClicked(true)} // p 태그 클릭 시 onBlur 방지
+        onClick={() => { handleExpand(); setButtonClicked(false); }} // 클릭 후 상태 리셋
+        onTouchStart={handleExpand} // 모바일에서 터치로 확장
       >
         {currentTitle}
       </p>
