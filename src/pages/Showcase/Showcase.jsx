@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import useShowcaseStore from './store';
 import ControlPanel from './ControlPanel';
-import ServerResponse from '../../componets/ServerResponse';
+import ServerResponse from '../../components/ServerResponse';
 import TextInput from './TextInput';
 import VideoPlayer from './VideoPlayer';
 
@@ -39,7 +39,6 @@ const Showcase = () => {
         console.log('Received:', data);
         setResponse(data);
 
-        // Assuming data is an array of video URLs and titles
         if (Array.isArray(data)) {
           setVideoData(data);
           setCurrentVideoIndex(0);

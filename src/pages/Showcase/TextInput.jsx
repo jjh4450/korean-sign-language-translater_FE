@@ -9,9 +9,7 @@ const TextInput = () => {
   const socket = useShowcaseStore((state) => state.socket);
   const currentTitle = useShowcaseStore((state) => state.currentTitle);
 
-  const handleExpand = () => {
-    setIsExpanded(true);
-  };
+  const handleExpand = () => setIsExpanded(true);
 
   const handleShrink = () => {
     if (!buttonClicked) {
@@ -21,17 +19,11 @@ const TextInput = () => {
 
   const handleButtonClick = () => {
     const inputValue = inputRef.current.value;
-    // console.log('Sending:', inputValue);
 
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.send(inputValue);
     }
-    setButtonClicked(false); // 클릭 처리 후 리셋
-  };
-
-  const handleTextInputExpand = () => {
-    setIsExpanded(true);
-    inputRef.current.focus();
+    setButtonClicked(false);
   };
 
   useEffect(() => {
@@ -52,7 +44,7 @@ const TextInput = () => {
       <p
         className="mt-8 bg-gray-100 p-4 rounded-t-lg shadow-inner text-xl font-medium text-gray-800 cursor-pointer"
         onClick={handleExpand}
-        onTouchStart={handleExpand} // 모바일에서 터치로 확장
+        onTouchStart={handleExpand}
       >
         {currentTitle}
       </p>
@@ -68,16 +60,21 @@ const TextInput = () => {
         onFocus={handleExpand}
         onBlur={(e) => {
           if (!e.currentTarget.contains(e.relatedTarget)) {
-            setTimeout(handleShrink, 0); // 포커스를 잃었을 때 축소
+            setTimeout(handleShrink, 0);
           }
         }}
       />
       <div className="flex justify-center space-x-4">
-        <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-lg text-lg transition duration-200 ease-in-out transform hover:scale-105">음성</button>
+        <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-lg text-lg transition duration-200 ease-in-out transform hover:scale-105">
+          음성
+        </button>
         <button
           className="inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded-lg text-lg transition duration-200 ease-in-out transform hover:scale-105"
-          onMouseDown={() => setButtonClicked(true)} // 문자 버튼 클릭 시 onBlur 방지
-          onClick={() => { handleTextInputExpand(); handleButtonClick(); }} // 문자 버튼 클릭 시 텍스트 입력 필드 확장 및 전송
+          onMouseDown={() => setButtonClicked(true)}
+          onClick={() => {
+            handleExpand();
+            handleButtonClick();
+          }}
         >
           문자
         </button>

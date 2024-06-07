@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import preimage from '@assets/preimage.lottie';
 import useShowcaseStore from './store';
@@ -8,14 +8,12 @@ const VideoPlayer = ({ videoRef }) => {
     videoData,
     currentVideoIndex,
     setCurrentVideoIndex,
-    currentTitle,
     setCurrentTitle,
     isLooping,
   } = useShowcaseStore((state) => ({
     videoData: state.videoData,
     currentVideoIndex: state.currentVideoIndex,
     setCurrentVideoIndex: state.setCurrentVideoIndex,
-    currentTitle: state.currentTitle,
     setCurrentTitle: state.setCurrentTitle,
     isLooping: state.isLooping,
   }));
@@ -41,7 +39,7 @@ const VideoPlayer = ({ videoRef }) => {
       videoRef.current.load();
       videoRef.current.playbackRate = 1.5; // 재생 속도 설정
     }
-  }, [currentVideoIndex, videoData, videoRef]);
+  }, [currentVideoIndex, videoRef]);
 
   const _css = "lg:w-2/5 md:w-1/2 w-full object-cover object-center rounded-t-lg shadow-lg aspect-square";
 
