@@ -2,7 +2,7 @@ import React from 'react';
 import {Routes, Route } from 'react-router-dom';
 import Header from './widgets/Header';
 import Home from './pages/Home';
-import Showcase from './pages/Showcase';
+import Showcase from './pages/Showcase/Showcase';
 import About from './pages/About';
 import NotFound from './pages/NotFound';
 import Footer from './widgets/Footer';
@@ -12,7 +12,7 @@ const App = () => {
     <div className="flex flex-col h-screen justify-between">
       <Header />
         <Routes>
-        <Route path='/' element={<Home />} />
+          <Route path='/' element={<Home />} />
           <Route path='/showcase' element={<Showcase/>} />
           <Route path='/about' element={<About/>} />
           <Route path='*' element={<NotFound/>} />
