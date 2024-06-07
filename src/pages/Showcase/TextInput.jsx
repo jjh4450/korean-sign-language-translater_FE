@@ -5,6 +5,7 @@ const TextInput = () => {
   const inputRef = useRef(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [buttonClicked, setButtonClicked] = useState(false);
+  const [recognizing, setRecognizing] = useState(false);
 
   const socket = useShowcaseStore((state) => state.socket);
   const currentTitle = useShowcaseStore((state) => state.currentTitle);
@@ -39,6 +40,37 @@ const TextInput = () => {
     };
   }, [buttonClicked]);
 
+  const startRecognition = () => {
+    const recognition = new window.webkitSpeechRecognition();
+    recognition.lang = 'ko-KR';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setRecognizing(true);
+    };
+
+    recognition.onresult = (event) => {
+      const speechResult = event.results[0][0].transcript;
+      inputRef.current.value = speechResult;
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(speechResult);
+      }
+      setRecognizing(false);
+    };
+
+    recognition.onerror = (event) => {
+      console.error('Speech recognition error:', event.error);
+      setRecognizing(false);
+    };
+
+    recognition.onend = () => {
+      setRecognizing(false);
+    };
+
+    recognition.start();
+  };
+
   return (
     <div className="text-center lg:w-2/5 md:w-1/2 w-full">
       <p
@@ -66,7 +98,11 @@ const TextInput = () => {
         }}
       />
       <div className="flex justify-center space-x-4">
-        <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-lg text-lg transition duration-200 ease-in-out transform hover:scale-105">
+        <button
+          className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-lg text-lg transition duration-200 ease-in-out transform hover:scale-105"
+          onClick={startRecognition}
+          disabled={recognizing}
+        >
           음성
         </button>
         <button
