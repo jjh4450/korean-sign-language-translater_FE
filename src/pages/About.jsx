@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { Pie } from 'react-chartjs-2';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
@@ -10,32 +10,60 @@ import use_motion from '@assets/use_motion.lottie';
 Chart.register(ArcElement, Tooltip, Legend);
 
 function About() {
-  const titleRef = useRef(null);
+  const titleRefs = useRef([]);
+  const chartRefs = useRef([]);
+  const [chartKeys, setChartKeys] = useState([0, 0]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    const titleObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('fade-in-visible');
-            observer.unobserve(entry.target);
+          } else {
+            entry.target.classList.remove('fade-in-visible');
           }
         });
       },
       { threshold: 0.1 }
     );
 
-    if (titleRef.current) {
-      observer.observe(titleRef.current);
-    }
+    const chartObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in-visible');
+            setChartKeys(prevKeys => {
+              const newKeys = [...prevKeys];
+              newKeys[index] += 1;
+              return newKeys;
+            });
+          } else {
+            entry.target.classList.remove('fade-in-visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    titleRefs.current.forEach(ref => {
+      if (ref) titleObserver.observe(ref);
+    });
+
+    chartRefs.current.forEach(ref => {
+      if (ref) chartObserver.observe(ref);
+    });
 
     return () => {
-      if (titleRef.current) {
-        observer.unobserve(titleRef.current);
-      }
+      titleRefs.current.forEach(ref => {
+        if (ref) titleObserver.unobserve(ref);
+      });
+      chartRefs.current.forEach(ref => {
+        if (ref) chartObserver.unobserve(ref);
+      });
     };
   }, []);
-  
+
   const pieColors = ['#FF6384', '#36A2EB', '#FFCE56'];
   const hoverPieColors = ['#FF4500', '#1E90FF', '#FFD700'];
 
@@ -89,7 +117,7 @@ function About() {
               style={{ width: '100%', height: 'auto' }}
             />
           </div>
-          <h1 ref={titleRef} className="fade-in mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
+          <h1 ref={el => titleRefs.current[0] = el} className="fade-in mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
             자막이면 전부 아닌가요?
           </h1>
           <p className="mx-auto text-gray-500 lg:w-2/3 mb-8">
@@ -99,10 +127,14 @@ function About() {
 
         <div className="flex flex-wrap mb-20">
           <div className="lg:w-1/2 w-full flex flex-col justify-center mb-8 lg:mb-0">
-            <Pie data={legalCommunicationData} options={chartOptions} />
+            <div ref={el => chartRefs.current[0] = el} data-chart>
+              <Pie key={`legal-${chartKeys[0]}`} data={legalCommunicationData} options={chartOptions} />
+            </div>
           </div>
           <div className="lg:w-1/2 w-full flex flex-col justify-center mb-8 lg:mb-0">
-            <Pie data={workplaceCommunicationData} options={chartOptions} />
+            <div ref={el => chartRefs.current[1] = el} data-chart>
+              <Pie key={`workplace-${chartKeys[1]}`} data={workplaceCommunicationData} options={chartOptions} />
+            </div>
           </div>
         </div>
 
@@ -116,7 +148,7 @@ function About() {
             />
           </div>
           <div className="lg:w-1/2 w-full flex flex-col justify-center px-4 lg:px-8">
-            <h1 className="text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
+            <h1 ref={el => titleRefs.current[1] = el} className="fade-in text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
               이런 서비스는 이미 있지 않나요?
             </h1>
             <p className="text-gray-500 mt-4">
@@ -127,7 +159,7 @@ function About() {
 
         <div className="flex flex-wrap mb-20">
           <div className="lg:w-1/2 w-full flex flex-col justify-center px-4 lg:px-8 mb-8 lg:mb-0">
-            <h1 className="text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
+            <h1 ref={el => titleRefs.current[2] = el} className="fade-in text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
               지문자?
             </h1>
             <p className="text-gray-500 mt-4">
@@ -141,7 +173,7 @@ function About() {
 
         <div className="flex flex-wrap mb-20">
           <div className="lg:w-1/2 w-full flex flex-col justify-center px-4 lg:px-8 mb-8 lg:mb-0">
-            <h1 className="text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
+            <h1 ref={el => titleRefs.current[3] = el} className="fade-in text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
               어떻게 사용하나요?
             </h1>
             <p className="text-gray-500 mt-4">
@@ -168,7 +200,7 @@ function About() {
             />
           </div>
           <div className="lg:w-1/2 w-full flex flex-col justify-center px-4 lg:px-8">
-            <h1 className="text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
+            <h1 ref={el => titleRefs.current[4] = el} className="fade-in text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
               어떻게 구현되었나요?
             </h1>
             <p className="text-gray-500 mt-4">
