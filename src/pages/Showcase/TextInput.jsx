@@ -8,6 +8,7 @@ const TextInput = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [buttonClicked, setButtonClicked] = useState(false);
   const [recognizing, setRecognizing] = useState(false);
+  const [isAppleDevice, setIsAppleDevice] = useState(false);
 
   const socket = useShowcaseStore((state) => state.socket);
   const currentTitle = useShowcaseStore((state) => state.currentTitle);
@@ -39,18 +40,23 @@ const TextInput = () => {
     };
   }, [handleShrink]);
 
-  // 애플 기기 (iOS와 macOS) 감지
-  const isAppleDevice = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+  useEffect(() => {
+    // 애플 기기 (iOS와 macOS) 감지
+    setIsAppleDevice(/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent));
+  }, []);
 
   const startRecognition = () => {
+    if (isAppleDevice) {
+      alert('이 기능은 현재 애플 기기에서 지원되지 않습니다.');
+      return;
+    }
+
     const error_message = '음성 인식에 실패했습니다.';
     const recognition = new window.webkitSpeechRecognition();
     recognition.lang = 'ko-KR';
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
-
-    // 애플 기기인 경우에만 연속 인식을 비활성화
-    recognition.continuous = !isAppleDevice;
+    recognition.continuous = true; // 애플 기기 외에서는 연속 인식을 사용
 
     recognition.onstart = () => setRecognizing(true);
 
@@ -71,16 +77,6 @@ const TextInput = () => {
       }
       handleSendText(inputRef.current.value);
       setRecognizing(false);
-
-      // 애플 기기에서 마이크 중지를 보장하기 위한 워크어라운드
-      if (isAppleDevice) {
-        try {
-          recognition.start();
-        } catch (err) {
-          console.error('Error during redundant start:', err);
-        }
-        recognition.stop();
-      }
     };
 
     recognition.start();
