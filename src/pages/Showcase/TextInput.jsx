@@ -39,12 +39,18 @@ const TextInput = () => {
     };
   }, [handleShrink]);
 
+  // 애플 기기 (iOS와 macOS) 감지
+  const isAppleDevice = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+
   const startRecognition = () => {
     const error_message = '음성 인식에 실패했습니다.';
     const recognition = new window.webkitSpeechRecognition();
     recognition.lang = 'ko-KR';
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
+
+    // 애플 기기인 경우에만 연속 인식을 비활성화
+    recognition.continuous = !isAppleDevice;
 
     recognition.onstart = () => setRecognizing(true);
 
@@ -65,6 +71,16 @@ const TextInput = () => {
       }
       handleSendText(inputRef.current.value);
       setRecognizing(false);
+
+      // 애플 기기에서 마이크 중지를 보장하기 위한 워크어라운드
+      if (isAppleDevice) {
+        try {
+          recognition.start();
+        } catch (err) {
+          console.error('Error during redundant start:', err);
+        }
+        recognition.stop();
+      }
     };
 
     recognition.start();
