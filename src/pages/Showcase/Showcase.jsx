@@ -76,6 +76,22 @@ const Showcase = () => {
     }
   }, [setVideoRef, response]);
 
+  useEffect(() => {
+    const scrollStep = 5; // 스크롤 단계 크기
+    let currentScroll = 0;
+    const targetScroll = window.innerHeight * 0.08;
+
+    const smoothScroll = () => {
+      currentScroll += scrollStep;
+      window.scrollBy(0, scrollStep);
+      if (currentScroll < targetScroll) {
+        requestAnimationFrame(smoothScroll);
+      }
+    };
+
+    requestAnimationFrame(smoothScroll);
+  }, []);
+
   return (
     <section className="text-gray-700 body-font">
       <div className="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
