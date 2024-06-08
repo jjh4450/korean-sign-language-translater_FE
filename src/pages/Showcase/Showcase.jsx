@@ -14,6 +14,7 @@ const Showcase = () => {
     setCurrentTitle,
     setVideoRef,
     response,
+    resetShowcase,
   } = useShowcaseStore((state) => ({
     setSocket: state.setSocket,
     setResponse: state.setResponse,
@@ -22,11 +23,14 @@ const Showcase = () => {
     setCurrentTitle: state.setCurrentTitle,
     setVideoRef: state.setVideoRef,
     response: state.response,
+    resetShowcase: state.resetShowcase,
   }));
 
   const videoRef = useRef(null);
 
   useEffect(() => {
+    resetShowcase();
+
     const ws = new WebSocket('ws://127.0.0.1:8000/ws/123');
 
     ws.onopen = () => {
@@ -64,7 +68,7 @@ const Showcase = () => {
     return () => {
       ws.close();
     };
-  }, [setSocket, setResponse, setVideoData, setCurrentTitle]);
+  }, [setSocket, setResponse, setVideoData, setCurrentTitle, resetShowcase]);
 
   useEffect(() => {
     if (videoRef.current) {

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import notfound404 from '../assets/notfound404.lottie';
+import notfound404 from '@assets/notfound404.lottie';
 
 function NotFound() {
     return (
