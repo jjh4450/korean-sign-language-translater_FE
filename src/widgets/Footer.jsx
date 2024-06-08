@@ -5,7 +5,8 @@ const Footer = () => {
     <footer className="text-gray-600 body-font">
       <div className="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
         <p className="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">
-          © 2024 조준환 —
+          © 2024 조준환 
+          <span className="hidden md:inline"> | © 2021 IF_O-LANGE</span> —
           <a href="mailto:jjh4450git@gmail.com" className="text-gray-600 ml-1" rel="noopener noreferrer" target="_blank">
             jjh4450git@gmail.com
           </a>

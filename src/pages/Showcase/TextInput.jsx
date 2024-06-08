@@ -43,7 +43,7 @@ const TextInput = () => {
   const startRecognition = () => {
     const recognition = new window.webkitSpeechRecognition();
     recognition.lang = 'ko-KR';
-    recognition.interimResults = false;
+    recognition.interimResults = true;
     recognition.maxAlternatives = 1;
 
     recognition.onstart = () => {
@@ -100,7 +100,13 @@ const TextInput = () => {
       <div className="flex justify-center space-x-4">
         <button
           className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-lg text-lg transition duration-200 ease-in-out transform hover:scale-105"
-          onClick={startRecognition}
+          onMouseDown={() => setButtonClicked(true)}
+          onClick={() => {
+            startRecognition();
+            handleExpand();
+            handleButtonClick();
+          }
+          }
           disabled={recognizing}
         >
           음성
