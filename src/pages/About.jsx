@@ -1,18 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { Pie } from 'react-chartjs-2';
-import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Chart, ArcElement, Tooltip, Legend, Title } from 'chart.js';
 import subtitle_motion from '@assets/subtitle_motion.lottie';
 import buildweb from '@assets/buildweb.lottie';
 import service_motion from '@assets/service_motion.lottie';
 import use_motion from '@assets/use_motion.lottie';
 
-Chart.register(ArcElement, Tooltip, Legend);
+Chart.register(ArcElement, Tooltip, Legend, Title);
 
 function About() {
   const titleRefs = useRef([]);
   const chartRefs = useRef([]);
-  const [chartKeys, setChartKeys] = useState([0, 0]);
+  const [legalChartKey, setLegalChartKey] = useState(0);
+  const [workplaceChartKey, setWorkplaceChartKey] = useState(0);
 
   useEffect(() => {
     const titleObserver = new IntersectionObserver(
@@ -30,14 +31,14 @@ function About() {
 
     const chartObserver = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry, index) => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('fade-in-visible');
-            setChartKeys(prevKeys => {
-              const newKeys = [...prevKeys];
-              newKeys[index] += 1;
-              return newKeys;
-            });
+            if (entry.target.dataset.chart === 'legal') {
+              setLegalChartKey(prevKey => prevKey + 1);
+            } else if (entry.target.dataset.chart === 'workplace') {
+              setWorkplaceChartKey(prevKey => prevKey + 1);
+            }
           } else {
             entry.target.classList.remove('fade-in-visible');
           }
@@ -126,14 +127,36 @@ function About() {
         </div>
 
         <div className="flex flex-wrap mb-20">
-          <div className="lg:w-1/2 w-full flex flex-col justify-center mb-8 lg:mb-0">
-            <div ref={el => chartRefs.current[0] = el} data-chart>
-              <Pie key={`legal-${chartKeys[0]}`} data={legalCommunicationData} options={chartOptions} />
+          <div className="lg:w-1/2 w-full flex flex-col justify-center items-center text-center mb-8 lg:mb-0">
+            <h2 className="text-2xl font-bold mb-4">법무 관련 관공서 의사소통 방법</h2>
+            <div ref={el => chartRefs.current[0] = el} data-chart="legal">
+              <Pie 
+                key={`legal-${legalChartKey}`} 
+                data={legalCommunicationData} 
+                options={{ 
+                  ...chartOptions, 
+                  plugins: { 
+                    ...chartOptions.plugins, 
+                    title: { display: false } 
+                  } 
+                }} 
+              />
             </div>
           </div>
-          <div className="lg:w-1/2 w-full flex flex-col justify-center mb-8 lg:mb-0">
-            <div ref={el => chartRefs.current[1] = el} data-chart>
-              <Pie key={`workplace-${chartKeys[1]}`} data={workplaceCommunicationData} options={chartOptions} />
+          <div className="lg:w-1/2 w-full flex flex-col justify-center items-center text-center mb-8 lg:mb-0">
+            <h2 className="text-2xl font-bold mb-4">직장 내 의사소통 방법</h2>
+            <div ref={el => chartRefs.current[1] = el} data-chart="workplace">
+              <Pie 
+                key={`workplace-${workplaceChartKey}`} 
+                data={workplaceCommunicationData} 
+                options={{ 
+                  ...chartOptions, 
+                  plugins: { 
+                    ...chartOptions.plugins, 
+                    title: { display: false } 
+                  } 
+                }} 
+              />
             </div>
           </div>
         </div>

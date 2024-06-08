@@ -11,7 +11,7 @@ function Header() {
             <nav className="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
                 <Link to="/" className="mr-5 hover:text-gray-900">홈</Link>
                 <Link to="/showcase" className="mr-5 hover:text-gray-900">시연</Link>
-                <Link to="/about" className="md:mr-5 hover:text-gray-900">소개</Link>
+                <Link to="/about" className="hover:text-gray-900">소개</Link>
             </nav>
             <Link to="/showcase">
               <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">체험하기
