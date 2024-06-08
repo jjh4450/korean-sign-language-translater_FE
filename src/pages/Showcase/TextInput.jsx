@@ -1,5 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import useShowcaseStore from './store';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import preimage from '@assets/sound_wave2.lottie';
 
 const TextInput = () => {
   const inputRef = useRef(null);
@@ -11,19 +13,11 @@ const TextInput = () => {
   const currentTitle = useShowcaseStore((state) => state.currentTitle);
 
   const handleExpand = () => setIsExpanded(true);
-
-  const handleShrink = () => {
-    if (!buttonClicked) {
-      setIsExpanded(false);
-    }
-  };
+  const handleShrink = () => !buttonClicked && setIsExpanded(false);
+  const handleSendText = (text) => socket && socket.readyState === WebSocket.OPEN && socket.send(text);
 
   const handleButtonClick = () => {
-    const inputValue = inputRef.current.value;
-
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(inputValue);
-    }
+    handleSendText(inputRef.current.value);
     setButtonClicked(false);
   };
 
@@ -38,33 +32,33 @@ const TextInput = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [buttonClicked]);
+  }, []);
 
   const startRecognition = () => {
+    const error_message = '음성 인식에 실패했습니다.';
     const recognition = new window.webkitSpeechRecognition();
     recognition.lang = 'ko-KR';
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
 
-    recognition.onstart = () => {
-      setRecognizing(true);
-    };
+    recognition.onstart = () => setRecognizing(true);
 
     recognition.onresult = (event) => {
-      const speechResult = event.results[0][0].transcript;
-      inputRef.current.value = speechResult;
-      if (socket && socket.readyState === WebSocket.OPEN) {
-        socket.send(speechResult);
-      }
+      inputRef.current.value = event.results[0][0].transcript;
       setRecognizing(false);
     };
 
     recognition.onerror = (event) => {
       console.error('Speech recognition error:', event.error);
+      inputRef.current.value = error_message;
       setRecognizing(false);
     };
 
     recognition.onend = () => {
+      if (inputRef.current.value === error_message) {
+        return;
+      }
+      handleSendText(inputRef.current.value);
       setRecognizing(false);
     };
 
@@ -75,9 +69,9 @@ const TextInput = () => {
     <div className="text-center lg:w-2/5 md:w-1/2 w-full">
       <p
         className="mt-8 bg-gray-100 p-4 rounded-t-lg shadow-inner text-xl font-medium text-gray-800 cursor-pointer"
-        onMouseDown={() => setButtonClicked(true)} // p 태그 클릭 시 onBlur 방지
-        onClick={() => { handleExpand(); setButtonClicked(false); }} // 클릭 후 상태 리셋
-        onTouchStart={handleExpand} // 모바일에서 터치로 확장
+        onMouseDown={() => setButtonClicked(true)}
+        onClick={() => { handleExpand(); setButtonClicked(false); }}
+        onTouchStart={handleExpand}
       >
         {currentTitle}
       </p>
@@ -97,22 +91,25 @@ const TextInput = () => {
           }
         }}
       />
-      <div className="flex justify-center space-x-4">
+      <div className="flex justify-center space-x-4 relative">
         <button
-          className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-lg text-lg transition duration-200 ease-in-out transform hover:scale-105"
+          className="relative inline-flex items-center justify-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-lg text-lg transition duration-200 ease-in-out transform hover:scale-105 overflow-hidden"
           onMouseDown={() => setButtonClicked(true)}
           onClick={() => {
             startRecognition();
             handleExpand();
-            handleButtonClick();
-          }
-          }
+          }}
           disabled={recognizing}
         >
-          음성
+          <span className={`relative z-10 ${recognizing ? 'text-transparent' : 'text-white'}`}>음성</span>
+          {recognizing && (
+            <div className="absolute inset-0 flex justify-center items-center z-0">
+              <DotLottieReact src={preimage} loop autoplay className="w-full h-full" />
+            </div>
+          )}
         </button>
         <button
-          className="inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded-lg text-lg transition duration-200 ease-in-out transform hover:scale-105"
+          className="inline-flex items-center justify-center text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded-lg text-lg transition duration-200 ease-in-out transform hover:scale-105"
           onMouseDown={() => setButtonClicked(true)}
           onClick={() => {
             handleExpand();

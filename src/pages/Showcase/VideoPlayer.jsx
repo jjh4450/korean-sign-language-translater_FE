@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import preimage from '@assets/preimage.lottie';
+import preimage from '@assets/sound_wave.lottie';
 import useShowcaseStore from './store';
 
 const VideoPlayer = ({ videoRef }) => {
