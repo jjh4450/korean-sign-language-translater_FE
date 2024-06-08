@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import useShowcaseStore from './store';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import preimage from '@assets/sound_wave2.lottie';
@@ -13,8 +13,13 @@ const TextInput = () => {
   const currentTitle = useShowcaseStore((state) => state.currentTitle);
 
   const handleExpand = () => setIsExpanded(true);
-  const handleShrink = () => !buttonClicked && setIsExpanded(false);
-  const handleSendText = (text) => socket && socket.readyState === WebSocket.OPEN && socket.send(text);
+  const handleShrink = useCallback(() => !buttonClicked && setIsExpanded(false), [buttonClicked]);
+
+  const handleSendText = (text) => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(text);
+    }
+  };
 
   const handleButtonClick = () => {
     handleSendText(inputRef.current.value);
@@ -32,7 +37,7 @@ const TextInput = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [handleShrink]);
 
   const startRecognition = () => {
     const error_message = '음성 인식에 실패했습니다.';
@@ -70,7 +75,10 @@ const TextInput = () => {
       <p
         className="mt-8 bg-gray-100 p-4 rounded-t-lg shadow-inner text-xl font-medium text-gray-800 cursor-pointer"
         onMouseDown={() => setButtonClicked(true)}
-        onClick={() => { handleExpand(); setButtonClicked(false); }}
+        onClick={() => {
+          handleExpand();
+          setButtonClicked(false);
+        }}
         onTouchStart={handleExpand}
       >
         {currentTitle}
