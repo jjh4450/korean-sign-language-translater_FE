@@ -27,11 +27,12 @@ const Showcase = () => {
   }));
 
   const videoRef = useRef(null);
+  const websocketUrl = import.meta.env.VITE_WEBSOCKET_URL;
 
   useEffect(() => {
     resetShowcase();
 
-    const ws = new WebSocket('ws://127.0.0.1:8000/ws/123');
+    const ws = new WebSocket(websocketUrl);
 
     ws.onopen = () => {
       console.log('WebSocket is connected');
