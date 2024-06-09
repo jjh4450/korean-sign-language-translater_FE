@@ -62,7 +62,7 @@ const VideoPlayer = ({ videoRef }) => {
       alt="hero"
       src={videoData[currentVideoIndex]?.url || ''}
       onEnded={handleVideoEnded}
-      controls
+      controls={currentVideoIndex === videoData.length - 1 && !isLooping}
       playsinline = "true"
       autoPlay
     />
