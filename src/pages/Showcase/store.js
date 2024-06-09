@@ -8,6 +8,7 @@ const useShowcaseStore = create((set) => ({
   currentTitle: '입력을 통해 번역 시작',
   isLooping: true,
   videoRef: null,
+  showControl: false,
   setSocket: (socket) => set({ socket }),
   setResponse: (response) => set({ response }),
   setVideoData: (videoData) => set({ videoData }),
@@ -17,6 +18,9 @@ const useShowcaseStore = create((set) => ({
   setCurrentTitle: (currentTitle) => set({ currentTitle }),
   setIsLooping: (isLooping) => set({ isLooping }),
   setVideoRef: (videoRef) => set({ videoRef }),
+  setShowControl: (updater) => set((state) => ({
+    showControl: typeof updater === 'function' ? updater(state.showControl) : updater
+  })),
   resetShowcase: () => set({
     socket: null,
     response: '',
@@ -25,6 +29,7 @@ const useShowcaseStore = create((set) => ({
     currentTitle: '입력을 통해 번역 시작',
     isLooping: true,
     videoRef: null,
+    showControl: false,
   })
 }));
 

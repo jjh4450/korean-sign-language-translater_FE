@@ -10,12 +10,16 @@ const VideoPlayer = ({ videoRef }) => {
     setCurrentVideoIndex,
     setCurrentTitle,
     isLooping,
+    showControl,
+    setShowControl,
   } = useShowcaseStore((state) => ({
     videoData: state.videoData,
     currentVideoIndex: state.currentVideoIndex,
     setCurrentVideoIndex: state.setCurrentVideoIndex,
     setCurrentTitle: state.setCurrentTitle,
     isLooping: state.isLooping,
+    showControl: state.showControl,
+    setShowControl: state.setShowControl,
   }));
 
   const handleVideoEnded = () => {
@@ -26,10 +30,12 @@ const VideoPlayer = ({ videoRef }) => {
           nextIndex %= videoData.length;
         } else {
           videoRef.current.pause();
+          setShowControl(true);
           return prevIndex;
         }
       }
       setCurrentTitle(videoData[nextIndex].title);
+      setShowControl(false);
       return nextIndex;
     });
   };
@@ -62,8 +68,8 @@ const VideoPlayer = ({ videoRef }) => {
       alt="hero"
       src={videoData[currentVideoIndex]?.url || ''}
       onEnded={handleVideoEnded}
-      controls={currentVideoIndex === videoData.length - 1 && !isLooping}
-      playsinline = "true"
+      controls={showControl}
+      playsInline
       autoPlay
     />
   );
