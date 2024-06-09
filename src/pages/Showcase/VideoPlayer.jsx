@@ -50,7 +50,6 @@ const VideoPlayer = ({ videoRef }) => {
           src={preimage}
           loop
           autoplay
-          playsinline
         />
       </div>
     );
@@ -65,6 +64,7 @@ const VideoPlayer = ({ videoRef }) => {
       onEnded={handleVideoEnded}
       controls
       autoPlay
+      playsinline
     />
   );
 };
