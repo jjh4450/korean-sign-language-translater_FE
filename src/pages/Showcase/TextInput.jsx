@@ -47,7 +47,8 @@ const TextInput = () => {
 
   const startRecognition = () => {
     if (isAppleDevice) {
-      alert('이 기능은 현재 애플 기기에서 지원되지 않습니다.');
+      alert('키보드에서 🎙️아이콘을 눌러 받아쓰기 기능을 이용해 주세요! "문자"버튼을 눌러 주시면 됩니다');
+      inputRef.current.focus(); // Add this line to focus on the input field
       return;
     }
 

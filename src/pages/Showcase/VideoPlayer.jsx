@@ -63,8 +63,8 @@ const VideoPlayer = ({ videoRef }) => {
       src={videoData[currentVideoIndex]?.url || ''}
       onEnded={handleVideoEnded}
       controls
+      playsinline = "true"
       autoPlay
-      playsinline
     />
   );
 };
