@@ -56,13 +56,11 @@ const TextInput = () => {
     recognition.lang = 'ko-KR';
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
-    recognition.continuous = true; // 애플 기기 외에서는 연속 인식을 사용
 
     recognition.onstart = () => setRecognizing(true);
 
     recognition.onresult = (event) => {
       inputRef.current.value = event.results[0][0].transcript;
-      setRecognizing(false);
     };
 
     recognition.onerror = (event) => {
