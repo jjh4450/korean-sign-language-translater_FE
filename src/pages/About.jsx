@@ -191,7 +191,7 @@ function About() {
             </p>
           </div>
           <div className="lg:w-1/2 w-full flex flex-col justify-center">
-            <Ji_munja className="w-1/2 mx-auto"/>
+            <Ji_munja className="lg:w-1/2 mx-auto"/>
           </div>
         </div>
 
