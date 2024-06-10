@@ -6,6 +6,7 @@ import subtitle_motion from '@assets/subtitle_motion.lottie';
 import buildweb from '@assets/buildweb.lottie';
 import service_motion from '@assets/service_motion.lottie';
 import use_motion from '@assets/use_motion.lottie';
+import Ji_munja from '@assets/ji_munja.svg?react';
 
 Chart.register(ArcElement, Tooltip, Legend, Title);
 
@@ -190,7 +191,7 @@ function About() {
             </p>
           </div>
           <div className="lg:w-1/2 w-full flex flex-col justify-center">
-            <img src={"/ji_munja.webp"} alt='지문자' className="mx-auto" style={{ maxWidth: '80%', height: 'auto' }} />
+            <Ji_munja className="w-full h-full"/>
           </div>
         </div>
 
@@ -227,7 +228,7 @@ function About() {
               어떻게 구현되었나요?
             </h1>
             <p className="text-gray-500 mt-4">
-              O-LANGE는 청각 장애인 분들의 정보 접근성과 의사소통 편의성을 향상시키기 위해 실시간 음성 인식 수어 번역 프로그램을 개발하는 프로젝트입니다. 이 프로젝트는 <strong><a href="https://sldict.korean.go.kr/front/main/main.do"><u>국립국어원 한국 수어사전</u></a></strong>의 데이터를 활용하여 개발되었습니다. 처음에는 간단히 정적 웹사이트로 구현하였으나, <strong>접근성을 개선하기 위해 동적인 웹사이트 구현이 필요</strong>했습니다. 그래서 React와 Tailwind CSS를 사용하여 사이트를 구성하게 되었습니다. <strong>음성 인식 기능은 webkitSpeechRecognition을 사용</strong>하여 구현되었으며, FastAPI 기반의 <strong>웹소켓을 사용하여 백엔드를 구성</strong>했습니다. 이를 통해 웹에서 음성을 입력받아 번역된 수어를 보여줄 수 있게 되었습니다. 이 모든 소스 코드는 footer에 있는 제 깃허브에서 확인하실 수 있습니다. 2021년에 저와 함께 이 훌륭한 프로젝트를 진행해 3년 뒤 온전한 서비스로 구현할 초석을 다져준 <strong><a href="https://github.com/finimage"><u>위재현</u></a>, <a href="https://github.com/MC-130J-30"><u>박상현</u></a>, <a href="https://github.com/setak482"><u>최재경</u></a>, <a href="https://github.com/yoonhofriday"><u>정윤호</u></a> 학생에게 감사의 말씀을 드립니다.</strong> (© 2021 IF_O-LANGE)
+              O-LANGE는 청각 장애인 분들의 정보 접근성과 의사소통 편의성을 향상시키기 위해 실시간 음성 인식 수어 번역 프로그램을 개발하는 프로젝트입니다. 이 프로젝트는 <strong><a href="https://sldict.korean.go.kr/front/main/main.do"><u>국립국어원 한국 수어사전</u></a></strong>의 데이터를 활용하여 개발되었습니다. 처음에는 간단히 정적 웹사이트로 구현하였으나, <strong>접근성을 개선하기 위해 동적인 웹사이트 구현이 필요</strong>했습니다. 그래서 React와 Tailwind CSS를 사용하여 사이트를 구성하게 되었습니다. <strong>음성 인식 기능은 webkitSpeechRecognition을 사용</strong>하여 구현되었으며, FastAPI 기반의 <strong>웹소켓을 사용하여 백엔드를 구성</strong>했습니다. 이를 통해 웹에서 음성을 입력받아 번역된 수어를 보여줄 수 있게 되었습니다. 이 모든 소스 코드는 footer에 있는 제 깃허브에서 확인하실 수 있습니다. 2021년에 저와 함께 이 훌륭한 프로젝트를 진행해 3년 뒤 온전한 서비스로 구현할 초석을 다져준 <strong><a href="https://github.com/finimage"><u>위재현</u></a>, <a href="https://github.com/MC-130J-30"><u>박상현</u></a>, <a href="https://github.com/setak482"><u>최재경</u></a>, <a href="https://github.com/yoonhofriday"><u>정윤호</u></a> 학생과, 지도교사 안지훈 선생님께 감사의 말씀을 드립니다.</strong> (© 2021 IF_O-LANGE)
             </p>
           </div>
         </div>
