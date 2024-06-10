@@ -28,11 +28,10 @@ const Showcase = () => {
 
   const videoRef = useRef(null);
   const websocketUrl = import.meta.env.VITE_WEBSOCKET_URL;
+  let ws;
 
-  useEffect(() => {
-    resetShowcase();
-
-    const ws = new WebSocket(websocketUrl);
+  const connectWebSocket = () => {
+    ws = new WebSocket(websocketUrl);
 
     ws.onopen = () => {
       console.log('WebSocket is connected');
@@ -58,15 +57,36 @@ const Showcase = () => {
 
     ws.onclose = () => {
       console.log('WebSocket is closed');
+      reconnectWebSocket();
     };
 
     ws.onerror = (error) => {
       console.error('WebSocket error:', error);
+      ws.close();
     };
 
     setSocket(ws);
+  };
+
+  const reconnectWebSocket = () => {
+    console.log('Attempting to reconnect WebSocket...');
+    setTimeout(() => {
+      connectWebSocket();
+    }, 5000); // 5초 후 재연결 시도
+  };
+
+  useEffect(() => {
+    resetShowcase();
+    connectWebSocket();
+
+    const checkConnection = setInterval(() => {
+      if (ws.readyState === WebSocket.CLOSED) {
+        reconnectWebSocket();
+      }
+    }, 10000); // 10초마다 연결 상태 확인
 
     return () => {
+      clearInterval(checkConnection);
       ws.close();
     };
   }, [setSocket, setResponse, setVideoData, setCurrentTitle, resetShowcase]);
