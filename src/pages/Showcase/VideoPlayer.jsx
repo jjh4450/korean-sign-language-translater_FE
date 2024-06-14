@@ -3,6 +3,14 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import preimage from '@assets/sound_wave.lottie';
 import useShowcaseStore from './store';
 
+/**
+ * 비디오 플레이어 컴포넌트입니다.
+ *
+ * @component
+ * @param {Object} props - 컴포넌트 속성
+ * @param {Object} props.videoRef - 비디오 참조 객체
+ * @returns {JSX.Element} VideoPlayer 컴포넌트
+ */
 const VideoPlayer = ({ videoRef }) => {
   const {
     videoData,

@@ -2,6 +2,11 @@ import { Link } from 'react-router-dom';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import notfound404 from '@assets/notfound404.lottie';
 
+/**
+ * NotFound 컴포넌트는 존재하지 않는 페이지를 나타내는 컴포넌트입니다.
+ * 
+ * @returns {JSX.Element} 존재하지 않는 페이지를 나타내는 JSX 요소
+ */
 function NotFound() {
     return (
         <section className="text-gray-600 body-font flex flex-col justify-center ">

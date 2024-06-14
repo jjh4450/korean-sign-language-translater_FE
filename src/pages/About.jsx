@@ -10,6 +10,15 @@ import Ji_munja from '@assets/ji_munja.svg?react';
 
 Chart.register(ArcElement, Tooltip, Legend, Title);
 
+/**
+ * 소개 페이지 컴포넌트.
+ *
+ * @component
+ * @example
+ * return (
+ *   <About />
+ * )
+ */
 function About() {
   const titleRefs = useRef([]);
   const chartRefs = useRef([]);

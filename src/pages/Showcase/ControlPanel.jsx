@@ -3,6 +3,9 @@ import useShowcaseStore from './store';
 import Pipicon from '@assets/pipicon.svg?react';
 import { useEffect } from 'react';
 
+/**
+ * ControlPanel 컴포넌트는 비디오 컨트롤을 제어하는 패널을 렌더링합니다.
+ */
 const ControlPanel = () => {
   const { isLooping, setIsLooping, videoRef, setShowControl } = useShowcaseStore((state) => ({
     isLooping: state.isLooping,

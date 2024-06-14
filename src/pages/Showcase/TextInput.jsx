@@ -3,6 +3,10 @@ import useShowcaseStore from './store';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import preimage from '@assets/sound_wave2.lottie';
 
+/**
+ * TextInput 컴포넌트는 사용자로부터 텍스트를 입력받는 입력 필드를 제공합니다.
+ * 입력된 텍스트를 서버로 전송하거나 음성 인식 기능을 사용할 수 있습니다.
+ */
 const TextInput = () => {
   const inputRef = useRef(null);
   const [isExpanded, setIsExpanded] = useState(false);

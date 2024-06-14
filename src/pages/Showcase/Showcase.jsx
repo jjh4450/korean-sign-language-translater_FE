@@ -5,6 +5,9 @@ import ServerResponse from '../../components/ServerResponse';
 import TextInput from './TextInput';
 import VideoPlayer from './VideoPlayer';
 
+/**
+ * Showcase 컴포넌트는 웹소켓을 통해 서버와 통신하고, 비디오 플레이어, 컨트롤 패널, 텍스트 입력 등을 포함한 쇼케이스 페이지를 렌더링합니다.
+ */
 const Showcase = () => {
   const {
     setSocket,

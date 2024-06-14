@@ -1,5 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
+/**
+ * 홈 컴포넌트입니다.
+ * 
+ * @returns {JSX.Element} 홈 컴포넌트 JSX 요소
+ */
 function Home() {
   const titleRef = useRef(null);
 
