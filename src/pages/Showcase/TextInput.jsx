@@ -11,7 +11,7 @@ const TextInput = () => {
   const inputRef = useRef(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [buttonClicked, setButtonClicked] = useState(false);
-  const [recognizing, setRecognizing] = useState(false);
+  const [recognition, setRecognition] = useState(null);
   const [isAppleDevice, setIsAppleDevice] = useState(false);
 
   const socket = useShowcaseStore((state) => state.socket);
@@ -49,42 +49,67 @@ const TextInput = () => {
     setIsAppleDevice(/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent));
   }, []);
 
-  const startRecognition = () => {
+  const isRecognizing = () => {
+    return recognition !== null;
+  }
+
+  const stopRecognition = () => {
+    if (recognition) {
+      recognition.stop();
+      setRecognition(null);
+    }
+  };
+
+  const abortRecognition = () => {
+    if (recognition) {
+      recognition.abort();
+      setRecognition(null);
+    }
+  };
+
+  const initializeRecognition = () => {
     inputRef.current.value = '';
     if (isAppleDevice) {
       alert('키보드에서 🎙️아이콘을 눌러 받아쓰기 기능을 이용해 주세요! 이후 "문자"버튼을 눌러 주시면 됩니다~');
-      inputRef.current.focus(); // Add this line to focus on the input field
+      inputRef.current.focus();
       return;
     }
 
     const error_message = '음성 인식에 실패했습니다.';
-    const recognition = new window.webkitSpeechRecognition();
-    recognition.lang = 'ko-KR';
-    recognition.interimResults = true;
-    recognition.maxAlternatives = 1;
+    const recognitionInstance = new window.webkitSpeechRecognition();
+    recognitionInstance.lang = 'ko-KR';
+    recognitionInstance.interimResults = true;
+    recognitionInstance.maxAlternatives = 1;
 
-    recognition.onstart = () => setRecognizing(true);
-
-    recognition.onresult = (event) => {
+    recognitionInstance.onresult = (event) => {
       inputRef.current.value = event.results[0][0].transcript;
     };
 
-    recognition.onerror = (event) => {
+    recognitionInstance.onerror = (event) => {
       console.error('Speech recognition error:', event.error);
       inputRef.current.value = error_message;
-      setRecognizing(false);
+      setRecognition(null);
     };
 
-    recognition.onend = () => {
+    recognitionInstance.onend = () => {
       if (inputRef.current.value === error_message) {
         return;
       }
       handleSendText(inputRef.current.value);
-      setRecognizing(false);
+      setRecognition(null);
     };
 
-    recognition.start();
+    recognitionInstance.start();
+    setRecognition(recognitionInstance);
   };
+
+  const toggleRecognition = () => {
+    if (isRecognizing()) {
+      stopRecognition();
+    } else {
+      initializeRecognition();
+    }
+  }
 
   return (
     <div className="text-center lg:w-2/5 md:w-1/2 w-full">
@@ -119,14 +144,14 @@ const TextInput = () => {
         <button
           className="relative inline-flex items-center justify-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-lg text-lg transition duration-200 ease-in-out transform hover:scale-105 overflow-hidden"
           onMouseDown={() => setButtonClicked(true)}
+          onDoubleClick={() => setRecognition(null)}
           onClick={() => {
-            startRecognition();
+            toggleRecognition();
             handleExpand();
           }}
-          disabled={recognizing}
         >
-          <span className={`relative z-10 ${recognizing ? 'text-transparent' : 'text-white'}`}>음성</span>
-          {recognizing && (
+          <span className={`relative z-10 ${isRecognizing() ? 'text-transparent' : 'text-white'}`}>음성</span>
+          {isRecognizing() && (
             <div className="absolute inset-0 flex justify-center items-center z-0">
               <DotLottieReact src={preimage} loop autoplay className="w-full h-full" />
             </div>
