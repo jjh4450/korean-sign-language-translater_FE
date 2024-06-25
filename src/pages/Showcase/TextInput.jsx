@@ -22,6 +22,9 @@ const TextInput = () => {
 
   const handleSendText = (text) => {
     if (socket && socket.readyState === WebSocket.OPEN) {
+      if (inputRef.current.value === '') {
+        alert('번역할 문자가 없습니다. 다시 시도해 주세요.')
+      }
       socket.send(text);
     }
   };
