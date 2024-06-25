@@ -12,17 +12,26 @@ const ControlPanel = () => {
     setIsLooping: state.setIsLooping,
     videoRef: state.videoRef,
     setShowControl: state.setShowControl,
+    videoData: state.videoData,
   }));
 
   useEffect(() => {
     setShowControl(true);
   }, [document.pictureInPictureElement]);
 
+  const emptyPlayerWarning = () => {
+    if (!videoRef) {
+      alert('재생할 동영상이 없습니다. 문자 버튼을 눌러 번역을 시작하세요!');
+    }
+  }
+
   const toggleLooping = () => {
+    emptyPlayerWarning();
     setIsLooping(!isLooping);
   };
 
   const handlePip = () => {
+    emptyPlayerWarning();
     if (document.pictureInPictureEnabled && videoRef && !videoRef.disablePictureInPicture) {
       if (document.pictureInPictureElement) {
         document.exitPictureInPicture();
